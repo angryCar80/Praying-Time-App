@@ -34,9 +34,10 @@ function main() {
   if (args.length < 0) {
     chalk.white.bgRed.bold("WRONG ARGUMNETS");
   } if (args[0] == "--help") {
-    let flagsDisplay: string = flags.join("\n");
     console.log("available arguments:");
-    console.log(flagsDisplay);
+    console.log("   --country <country> <city>");
+    console.log("   --help");
+
   }
   else if (args[0] == "--country") {
     readApi(args);
