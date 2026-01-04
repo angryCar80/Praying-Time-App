@@ -1,20 +1,34 @@
 import chalk from "chalk";
 
-// let country_op: string;
-// let city_op: string;
-
-let API_URL: string = "https://api.aladhan.com/v1/timingsByCity?city=Algiers&country=Algeria";
-
-
 const args: string[] = process.argv.slice(2);
-const flags: string[] = ["help", "country"];
+// const flags: string[] = ["help", "country"];
 
-async function readApi(args: string[]) {
+
+
+// Default values
+const defaultCountry = "Algeria";
+const defaultCity = "Algiers";
+
+let newCountry: string;
+let newCity: string;
+function getNames() {
+  newCountry = args[1] ?? defaultCountry;
+  newCity = args[2] ?? defaultCity;
+}
+
+getNames();
+
+// Step 3: Build URLs AFTER reading input
+let API_URL: string = `https://api.aladhan.com/v1/timingsByCity?city=undefined&country=undefined`;
+let DEFAULT_API_URL: string = `https://api.aladhan.com/v1/timingsByCity?city=${defaultCity}&country=${defaultCountry}`;
+
+
+async function readApi(args: string[], URL: string) {
   try {
 
     const query = args[0] ?? "default";
 
-    const res = await fetch(`${API_URL}?q=${query}`);
+    const res = await fetch(`${URL}?q=${query}`);
 
     if (!res.ok) {
       throw new Error(`API error: ${res.status}`);
@@ -33,14 +47,20 @@ async function readApi(args: string[]) {
 function main() {
   if (args.length < 0) {
     chalk.white.bgRed.bold("WRONG ARGUMNETS");
-  } if (args[0] == "--help") {
+  }
+  getNames();
+  if (args[0] == "--help") {
     console.log("available arguments:");
     console.log("   --country <country> <city>");
     console.log("   --help");
 
   }
-  else if (args[0] == "--country") {
-    readApi(args);
+  else if (args[0] == "--run") {
+    readApi(args, DEFAULT_API_URL);
+  } else if (args[0] == "--country") {
+    getNames();
+    API_URL =  `https://api.aladhan.com/v1/timingsByCity?city=${newCity}&country=${newCountry}`;
+    readApi(args, API_URL);
   }
   else {
     console.log(chalk.white.bgRed.bold("WRONG ARGUMNETS"));
