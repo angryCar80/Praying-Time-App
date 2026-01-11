@@ -53,12 +53,9 @@ async function readApi(args: string[], URL: string) {
   }
 }
 
-function refresh() {
-  console.clear();
-}
 
 function prayerTimeToDate(time: string): Date {
-  const [hours, minutes] = time.split(":").map(Number);
+  const [hours, minutes]: any = time.split(":").map(Number);
   const now = new Date();
 
   const prayerDate = new Date();
@@ -125,7 +122,7 @@ async function watchPrayerTimes(url: string) {
 
 function main() {
   if (args.length < 0) {
-    chalk.white.bgRed.bold("WRONG ARGUMNETS");
+    chalk.red.bold("WRONG ARGUMNETS");
   }
   getNames();
   if (args[0] == "--help") {
